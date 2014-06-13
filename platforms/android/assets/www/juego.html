@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <title>Juego</title>
+
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <script type="text/javascript">
+
+        </script>
+    </head>
+    <body>
+        <!-- GRID -->
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <div class="botonAccion bComer" id="comerB"></div>
+            </div>
+            <div class="ui-block-b">
+                <span id="nombrePet"></span>
+            </div>
+            <div class="ui-block-c">
+                <div class="botonAccion bJugar" id="jugarB"></div>
+            </div>
+        </div>
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <img src="img/hospital-cross.png" id="cross">
+            </div>
+            <div class="ui-block-b">
+                <div class="health-bar">
+                    <div class="health-bar health-bar-quantity"></div>
+                </div>
+            </div>
+            <div class="ui-block-c">
+                <div id="life">100%</div>
+            </div>
+        </div>
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <div id="accelerometer"></div>
+            </div>
+            <div class="ui-block-b" id="contieneImagen">
+                <img src="img/cordova_pet_stable.png" id="queco">
+            </div>
+            <div class="ui-block-c">
+                <img id="caca1" src="img/white.png">
+            </div>
+        </div>
+        <div class="ui-grid-b">
+            <div class="ui-block-a">
+                <div class="botonAccion bLavar" id="lavarB"></div>
+            </div>
+            <div class="ui-block-b">
+                <div id="barraInfo">
+                    <img class="icons-info" src="img/gluttony.png"><span id="infoHambre" class="InfoGF">0</span>
+                    <img class="icons-info" src="img/funny.png"><span id="infoDiver" class="InfoGF">10</span>
+                </div>
+            </div>
+            <div class="ui-block-c">
+                <div class="botonAccion bDormir" id="dormirB"></div>
+            </div>
+        </div>
+        <!-- /GRID -->
+        
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile.js"></script>
+        <script type="text/javascript">
+        document.addEventListener("deviceready",onDevice, false);
+
+            function onDevice(){
+                options = {frequency: 500};
+                navigator.accelerometer.watchAcceleration(accelOk, accelError, options);
+            }
+
+            function accelOk(acceleration){
+                $("#accelerometer").html(
+                    "x: " + Math.round(acceleration.x * 100)/100 + "<br/>" +
+                    "y: " + Math.round(acceleration.y * 100)/100 + "<br/>" +
+                    "z: " + Math.round(acceleration.z * 100)/100
+                    );
+            }
+
+            function accelError(error){
+                alert("Error:"+error.code);
+            }
+
+            // Objeto Mascota
+            //
+            var Mascota = function(id,nombre,salud,hambre,diversion,sucio,caca,ncaca,muerto){
+                //variables de mascota
+                this.id = id;
+                this.nombre = nombre;
+                this.salud = salud;//0-100
+                this.hambre = hambre;//0-10
+                this.diversion = diversion;//0-10
+                this.sucio = sucio;//0-5
+                this.caca = caca;//0-3
+                this.ncaca = ncaca;//0-5 cuenta las veces hasta que haces caca
+                this.muerto = muerto;//0 o 1
+
+                // Funcion para dar de comer a la mascota
+                //
+                this.comer = function(){
+                    navigator.notification.vibrate(500);
+                    //estado de barra
+                    var barra = $("div.health-bar").width();
+                    //porcentaje de vida que se va a restar
+                    var qGanaVida = (barra / 100) * 10;
+
+                    if(this.hambre > 0){
+                        this.hambre--;
+                        $("#infoHambre").html(this.hambre);
+                        this.ncaca++;
+                        if(this.salud <= 90){
+                            this.salud += 10;
+                            $("div.health-bar-quantity").width($("div.health-bar-quantity").width() + qGanaVida);
+                        }
+                        if(this.salud == 95){
+                            this.salud = 100;
+                            $("div.health-bar-quantity").width($("div.health-bar").width());
+                        }
+                    }
+                }// /this.comer
+
+                // funcion que controla el juego de la mascota
+                //
+                this.jugar = function(){
+                    this.sucio++;
+                    //aumenta la suciedad
+                    if(this.diversion < 10){
+                        this.diversion = 10;
+                        $("#infoDiversion").html(this.diversion);
+                        if(this.salud <= 90){
+                            this.salud += 10;
+                            $("div.health-bar-quantity").width($("div.health-bar-quantity").width() + qGanaVida);
+                        }
+                        if(this.salud == 95){
+                            this.salud = 100;
+                            $("div.health-bar-quantity").width($("div.health-bar").width());
+                        }
+                    }
+                    navigator.notification.beep(1);
+                }// /this.jugar
+
+                // Funcion que limpia a la mascota y cacas
+                //
+                this.limpiar = function(){
+                    //quita cacas
+                    $("#caca1").attr("src", "img/white.png");
+                    this.caca = 0;
+                    //limpia queco
+                    $("#queco").attr("src", "img/cordova_pet_stable.png");
+                    this.sucio = 0;
+                }// /this.limpiar
+            }// end objeto mascota
+
+            function inGame(mas){
+
+            document.addEventListener("backbutton", onBackKeyDown, false);
+
+                $("#nombrePet").html(mas.nombre);
+                $("#infoHambre").html(mas.hambre);
+                $("#infoDiver").html(mas.diversion);
+                $("#comerB").click(function(){mas.comer();});
+                $("#jugarB").click(function(){mas.jugar();});
+                $("#lavarB").click(function(){mas.limpiar();});
+                $("#dormirB").click(function(){
+                    navigator.notification.alert("Tu mascota se va a dormir", function(){}, "Zzz...");
+                    guardar();
+                });
+
+                var nSubeHambreId = window.setInterval(subeHambre, 7000);//7s
+                var nBajaDiverId = window.setInterval(bajaDiver, 10000);//10s
+                var nRecargaId = window.setInterval(recarga, 100);
+
+                function onBackKeyDown() {
+                    navigator.notification.alert("Tu mascota se va a dormir", function(){}, "Zzz...");
+                    guardar();
+                }
+
+                function guardar(){
+
+                    var miMas = mas;
+
+                    function modificar(tx) {
+                         tx.executeSql('UPDATE PETS SET SALUD = '+miMas.salud+', HAMBRE = '+miMas.hambre+', DIVERSION = '+miMas.diversion+', SUCIO = '+miMas.sucio+', CACA = '+miMas.caca+', NCACA = '+miMas.ncaca+', MUERTO = '+miMas.muerto+' WHERE ID = '+miMas.id);
+                    }
+
+                    function consulta(tx) {
+                        tx.executeSql('SELECT * FROM PETS', [], exito,fallo);
+                    }
+
+                    function exito(tx, results) {
+                        //
+                    }
+
+                    function fallo(err) {
+                        alert("Error processing SQL: "+err.message);
+                    }
+
+                    function successCB3() {
+                        var db = window.openDatabase("Pets", "1.0", "Cordova Pet", 200000);
+                        db.transaction(consulta, fallo);
+                    }
+
+                    var db = window.openDatabase("Pets", "1.0", "Cordova Pet", 200000);
+                    db.transaction(modificar, errorCB, successCB3);
+                    window.location.href = 'index.html';
+                }
+
+                function guardarM(){
+
+                    var miMas = mas;
+
+                    var idr = Math.floor((Math.random() * 9999));
+                    var idr2 = Math.floor((Math.random() * 9999));
+                    var idr3 = Math.floor((Math.random() * 9999));
+
+                    function modificar(tx) {
+                         tx.executeSql('UPDATE PETS SET SALUD = '+miMas.salud+', HAMBRE = '+miMas.hambre+', DIVERSION = '+miMas.diversion+', SUCIO = '+miMas.sucio+', CACA = '+miMas.caca+', NCACA = '+miMas.ncaca+', MUERTO = '+miMas.muerto+', ID = '+idr+idr2+idr3+'  WHERE ID = '+miMas.id);
+                    }
+
+                    function consulta(tx) {
+                        tx.executeSql('SELECT * FROM PETS', [], exito, fallo);
+                    }
+
+                    function exito(tx, results) {
+                        //
+                    }
+
+                    function fallo(err) {
+                        alert("Error processing SQL: "+err.message);
+                    }
+
+                    function successCB3() {
+                        var db = window.openDatabase("Pets", "1.0", "Cordova Pet", 200000);
+                        db.transaction(consulta, fallo);
+                    }
+
+                    var db = window.openDatabase("Pets", "1.0", "Cordova Pet", 200000);
+                    db.transaction(modificar, errorCB, successCB3);
+                    window.location.href = 'index.html';
+                }
+
+                function morir(){
+                    mas.muerto = 1;
+                    guardarM();
+                }
+
+                // funcion que va reseteando los valores por pantalla cada 100 milisegundos
+                //
+                function recarga(){
+                    var salud = mas.salud;
+                    var hambre = mas.hambre;
+                    var diversion = mas.diversion;
+                    var sucio = mas.sucio;
+                    var ncaca = mas.ncaca;
+
+                    // CONOCER si la salud es de 100-0
+                    if(salud > 0){
+                        //sigue vivo, diferenciar entre sucio y limpio
+                        //recargamos el html
+                        $("#infoHambre").html(mas.hambre);
+                        //recargamos html
+                        $("#infoDiver").html(mas.diversion);
+                        $("div.health-bar-quantity").width($("div.health-bar").width()/100*mas.salud);
+                        $("#life").html(mas.salud + "%");
+
+                        //1º limpio
+                        //
+                        if(sucio < 5){
+                            //caso del hambre y diversion juntos
+                            if(hambre < 5 && diversion > 5)
+                                $("#queco").attr('src','img/cordova_pet_stable.png');
+                            else if((hambre >= 5 && hambre < 8) && (diversion > 5))
+                                $("#queco").attr('src','img/cordova_pet_hungry.png');
+                            else if( (hambre < 5) && (diversion <= 5 && diversion > 2) )
+                                $("#queco").attr('src', 'img/cordova_pet_bored.png');
+                            else if( (hambre >= 5 && hambre < 8) && (diversion <= 5 && diversion > 2) )
+                                $("#queco").attr('src', 'img/cordova_pet_all.png');
+                            else if( (hambre >= 8 && diversion <= 5) || (hambre >= 5 && diversion <= 2) ){
+                                $("#queco").attr('src', 'img/cordova_pet_vall.png');
+                            }
+                            else if( hambre < 5 && diversion <= 2){
+                                $("#queco").attr('src', 'img/cordova_pet_vbored.png');
+                            }
+                            else if( hambre >= 8 && diversion > 5){
+                                $("#queco").attr('src', 'img/cordova_pet_vhungry.png');
+                            }
+                        }//end sucio!=5
+                        
+                        //2º sucio
+                        //
+                        if(sucio >= 5){
+                            //caso del hambre y diversion juntos
+                            if(hambre < 5 && diversion > 5)
+                                $("#queco").attr('src','img/cordova_pet_stable_d.png');
+                            else if((hambre >= 5 && hambre < 8) && (diversion > 5))
+                                $("#queco").attr('src','img/cordova_pet_hungry_d.png');
+                            else if( (hambre < 5) && (diversion <= 5 && diversion > 2) )
+                                $("#queco").attr('src', 'img/cordova_pet_bored_d.png');
+                            else if( (hambre >= 5 && hambre < 8) && (diversion <= 5 && diversion > 2) )
+                                $("#queco").attr('src', 'img/cordova_pet_all_d.png');
+                            else if( (hambre >= 8 && diversion <= 5) || (hambre >= 5 && diversion <= 2) ){
+                                $("#queco").attr('src', 'img/cordova_pet_vall_d.png');
+                            }
+                            else if( hambre < 5 && diversion <= 2){
+                                $("#queco").attr('src', 'img/cordova_pet_vbored_d.png');
+                            }
+                            else if( hambre >= 8 && diversion > 5){
+                                $("#queco").attr('src', 'img/cordova_pet_vhungry_d.png');
+                            }
+                        }// end sucio==5
+
+                        // CONTROL DE CACAS
+                        //
+                        if(ncaca == 5){
+                            //esta al max entonces dibuja caca
+                            mas.caca++;//hace caca
+                            mas.ncaca = 0;//resetea el contador
+                            if(mas.caca == 1)
+                                $("#caca1").attr('src', 'img/poop1.png');
+                            else if(mas.caca == 2)
+                                $("#caca1").attr('src', 'img/poop2.png');
+                            else if(mas.caca == 3)
+                                $("#caca1").attr('src', 'img/poop3.png');
+                        }
+                    }//end if vivo
+                    else{
+                        clearInterval(nRecargaId);//detencion
+                        clearInterval(nSubeHambreId);
+                        clearInterval(nBajaDiverId);
+                        if(sucio < 5)
+                            $("#queco").attr("src",'img/cordova_pet_dead.png');//esta muerto se cambia
+                        else
+                            $("#queco").attr("src",'img/cordova_pet_dead_d.png');
+
+                        morir();
+                        navigator.notification.alert("Tu mascota ha muerto", function(){}, "GAME OVER");
+                    }//end if muerto
+                }//end funcion recarga
+
+                // Funcion que sube el hambre y disminuye la salud al llegar al limite
+                //
+
+                function subeHambre(){
+                    //estado de barra
+                    var barra = $("div.health-bar").width();
+                    //porcentaje de vida que se va a restar
+                    var qPierdeVida = (barra / 100) * 5;
+                    //el hambre esta al maximo, por lo que pierde salud
+                    if(mas.hambre == 10){
+                        mas.salud -= 5;
+                        $("div.health-bar-quantity").width($("div.health-bar-quantity").width() - qPierdeVida);
+                        $("#life").html(mas.salud + "%");
+                    }
+                    else if(mas.hambre >= 0)
+                        mas.hambre++;
+                }// /subeHambre
+
+                // función que disminuye la diversion y disminuye salud al llegar al limite
+                //
+                function bajaDiver(){
+                    //la diversion esta al minimo, por lo que pierde salud
+                    //estado de barra
+                    var barra = $("div.health-bar").width();
+                    //porcentaje de vida que se va a restar
+                    var qPierdeVida = (barra / 100) * 5;
+                    if(mas.diversion == 0){
+                        mas.salud -= 5;
+                        $("div.health-bar-quantity").width($("div.health-bar-quantity").width() - qPierdeVida);
+                        $("#life").html(mas.salud + "%");
+                    }
+                    else if(mas.diversion <= 10)
+                        mas.diversion--;
+                }// /bajaDiver
+            }
+
+                
+
+        </script>
+        <script type="text/javascript" src="js/bd_juego.js"></script>
+    </body>
+</html>

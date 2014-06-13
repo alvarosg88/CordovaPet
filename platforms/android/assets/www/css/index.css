@@ -1,0 +1,190 @@
+* {
+    font-family:'HelveticaNeue-Light', 'HelveticaNeue', Helvetica, Arial, sans-serif;
+    margin:0px;
+    padding:0px;
+}
+body {
+    font-size:20px;
+    height:100%;
+    text-transform:uppercase;
+    width:100%;
+}
+#logo{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    width: 75%;
+}
+#logoIterate{
+    margin-top: 20px;
+    width: 30%;
+    display:block;
+    position: relative;
+    margin-right: auto;
+    margin-left: auto;
+    animation:leviosa 4s infinite;
+    -webkit-animation: leviosa 4s infinite;
+}
+@keyframes leviosa{
+    0%{top:0px;}
+    50%{top:15px;}
+    100%{top:0px;}
+}
+@-webkit-keyframes leviosa{
+    0%{top:0px;}
+    50%{top:15px;}
+    100%{top:0px;}
+}
+#mainMenu{
+    margin-top: 10%;
+}
+#secondMenu{
+    margin-top: 100px;
+}
+#backImg{
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+}
+#tutorialBox{
+    margin-top: 20px;
+}
+
+/*************************************/
+#nombrePet{
+    display: block;
+    margin: 30px auto;
+    text-align: center;
+}
+.botonAccion{
+    width: 60px;
+    height: 60px;
+    display: block;
+    position: relative;
+    background-repeat: no-repeat;
+    background-position: 10px 10px;
+    background-size: 40px 40px;
+    background-color: black;
+    border-radius: 100%;
+}
+.botonAccion:active{
+    box-shadow: 0px 0px 20px #009DCE;
+}
+.bComer{
+    margin: 20px auto 20px 10%;
+    background-image: url(../img/chicken-leg.png);
+}
+.bJugar{
+    margin:20px 10% 20px auto;
+    background-image: url(../img/soccer-ball.png);
+}
+.bDormir{
+    margin: 20px 10% 20px auto;
+    background-image: url(../img/sleeping-99120_640.png);
+}
+.bLavar{
+    margin: 20px auto 20px 10%;
+    background-image: url(../img/shower-99264_640.png);
+}
+/***************************/
+#cross{
+    position: relative;
+    display: block;
+    margin: 30px 5% 30px auto;
+    width: 30px;
+    height: 30px;
+}
+.health-bar{
+    position: relative;
+    display: block;
+    height: 26px;
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 5px;
+    background: #EDE992;
+    margin:30px 0 30px 0;
+}
+.health-bar-quantity{
+    z-index: 10;
+    border: none;
+    background: #4DC93F;
+    width: 100%;
+    margin:0;
+}
+#life{
+    position: relative;
+    display: block;
+    margin: 30px auto 30px 5%;
+}
+/********************************/
+#barraInfo{
+    margin-top: 50px;
+}
+.icons-info{
+    width:30px;
+    height: 30px;
+    margin-right: 10%;
+}
+.InfoGF{
+    position: relative;
+    bottom: 7px;
+}
+
+.tutpho{
+    display: block;
+    text-align: center;
+    margin: 10px;
+}
+.tutpho2{
+    width: 30%;
+    display: block;
+    text-align: left;
+    margin: 10px;
+}
+
+.total{
+    width:100%;
+}
+
+
+
+
+/*********************************/
+@media screen and (max-width: 970px) and (min-width: 750px) {/*tablet*/
+    #contieneImagen{
+        height: 200px;
+    }
+    #queco{
+        width: 170px;
+        height: 150px;
+        margin: 0 auto;
+        position: relative;
+        display: block;
+        animation:leviosa 4s infinite;
+        -webkit-animation: leviosa 4s infinite;
+    }
+     #caca1{
+        display: block;
+        width: 60%;
+        margin: 10px auto;
+    }
+}
+@media screen and (max-width: 750px){/*movil*/
+    #contieneImagen{
+        height: 150px;
+    }
+    #queco{
+        width: 150px;
+        height: 130px;
+        margin: 0 auto;
+        position: relative;
+        display: block;
+        animation:leviosa 4s infinite;
+        -webkit-animation: leviosa 4s infinite;
+    }
+    #caca1{
+        display: block;
+        width: 50%;
+        margin: 10px auto;
+    }
+}

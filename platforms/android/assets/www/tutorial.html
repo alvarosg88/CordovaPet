@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <title>Cordova Pet</title>
+
+        <link rel="stylesheet" type="text/css" href="css/jquery.mobile.css">
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        
+        <script type="text/javascript" src="js/jquery.js"></script>
+        <script type="text/javascript" src="js/jquery.mobile.js"></script>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <header data-role="header" data-position="fixed" data-theme="b">
+            <h1>Tutorial</h1>
+        </header>
+        <!-- /HEADER -->
+        
+        <!-- CONTENT -->
+        <h3 id="tutorialBox" class="ui-bar ui-bar-a">Información</h3>
+        <div class="ui-body">
+            <p>Bienvenido a Cordova Pet. Un juego desarrollado con ayuda de Apache Cordova con el que podrás crear tus propias mascotas, cuidarlas y tener un listado de tus mascotas ya perecidas. A continuación te explicamos el manejo de la aplicación.</p>
+        </div>
+
+        <h3 id="tutorialBox" class="ui-bar ui-bar-a">Inicio</h3>
+        <div class="ui-body">
+            En la pantalla de inicio se puede entrar en:
+            <ul>
+                <li><b>jugar</b> para comenzar el juego</li>
+                <li><b>cementerio</b> para ver las mascotas muertas</li>
+                <li><b>tutorial</b> para aprender a jugar</li>
+                <li><b>Créditos</b> para ver los desarrolladores del juego</li>
+            </ul>
+        </div>
+
+         <h3 id="tutorialBox" class="ui-bar ui-bar-a">Jugar</h3>
+        <div class="ui-body">
+           El juego consiste en mantener a nuestra mascota viva y contenta, para ello hay que lograr que la salud no llegue a cero.
+           <span class="tutpho"><img src="img/01.png"/></span>
+           Para ello debemos de utilizar los botones de los que disponemos para evitar que nuestra mascota, se ensucie, se haga caca, observando las llamadas de atención que nos hace nuestra mascota y los marcadores de necesidad:
+           <span class="tutpho"><img src="img/02.png" class="total"/></span>
+           La salud comienza a bajar cuando el indicador de hambre llega a 10 o cuando el de diversion llega a 0. Para evitar esto hay que utilizar los siguientes botones:
+            <span class="tutpho"><img src="img/03.png"/></span>
+            El botón dar de comer, reduce en uno el hambre de nuestra mascota y al pulsar sobre él nuestro dispositivo vibrara brevemente (siempre que tenga el dispositivo de vibración)
+            <span class="tutpho"><img src="img/04.png"/></span>
+            El botón de jugar accede al beep, sonando similar a los wassap (si tu dispositivo lo contempla), y sube automáticamente la diversión a 10.
+            <span class="tutpho"><img src="img/05.png"/></span>
+            Cuando nuestra mascota juega 5 veces se ensucia, y si come 5 veces se hace caca, con el botón de limpiar hacemos que nuestra mascota se quede limpia de nuevo.
+            <span class="tutpho"><img src="img/06.png"/></span>
+            Con el botón de dormir se guarda la mascota y el programa se va al menú donde podemos salir del programa. De este modo al entrar de nuevo a la aplicación seguiremos jugando con la misma mascota.
+        </div>
+        <!-- /CONTENT -->
+
+        <!-- FOOTER -->
+        <footer data-role="footer" data-position="fixed" data-theme="b">
+            <a id="backImg" class="ui-btn ui-icon-back ui-btn-icon-notext ui-corner-all" href="index.html"></a>
+        </footer>
+        <!-- /FOOTER -->
+        <script type="text/javascript" src="cordova.js"></script>
+    </body>
+</html>
